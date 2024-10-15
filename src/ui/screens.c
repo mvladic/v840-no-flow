@@ -10,8 +10,86 @@
 
 #include <string.h>
 
+groups_t groups;
+static bool groups_created = false;
+
 objects_t objects;
 lv_obj_t *tick_value_change_obj;
+
+static lv_meter_scale_t * scale0;
+static lv_meter_indicator_t * indicator1;
+static lv_meter_indicator_t * indicator2;
+static lv_meter_indicator_t * indicator3;
+
+static void event_handler_cb_main_main(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_SCREEN_LOAD_START) {
+        // group: encoder_group
+        lv_group_remove_all_objs(groups.encoder_group);
+    }
+}
+
+static void event_handler_cb_main_obj0(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_VALUE_CHANGED) {
+        lv_obj_t *ta = lv_event_get_target(e);
+        if (tick_value_change_obj != ta) {
+            int32_t value = lv_dropdown_get_selected(ta);
+            if (tick_value_change_obj != ta) {
+                assignIntegerProperty(flowState, 0, 4, value, "Failed to assign Selected in Dropdown widget");
+            }
+        }
+    }
+}
+
+static void event_handler_cb_main_obj1(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 4, 0, e);
+    }
+}
+
+static void event_handler_cb_screen2_screen2(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_SCREEN_LOAD_START) {
+        // group: encoder_group
+        lv_group_remove_all_objs(groups.encoder_group);
+    }
+}
+
+static void event_handler_cb_screen2_obj2(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_PRESSED) {
+        e->user_data = (void *)0;
+        flowPropagateValueLVGLEvent(flowState, 0, 0, e);
+    }
+}
+
+static void event_handler_cb_screen2_obj3(lv_event_t *e) {
+    lv_event_code_t event = lv_event_get_code(e);
+    void *flowState = lv_event_get_user_data(e);
+    
+    if (event == LV_EVENT_VALUE_CHANGED) {
+        lv_obj_t *ta = lv_event_get_target(e);
+        if (tick_value_change_obj != ta) {
+            int32_t value = lv_dropdown_get_selected(ta);
+            if (tick_value_change_obj != ta) {
+                assignIntegerProperty(flowState, 4, 4, value, "Failed to assign Selected in Dropdown widget");
+            }
+        }
+    }
+}
 
 void create_screen_main() {
     void *flowState = getFlowState(0, 0);
@@ -19,14 +97,94 @@ void create_screen_main() {
     objects.main = obj;
     lv_obj_set_pos(obj, 0, 0);
     lv_obj_set_size(obj, 800, 480);
+    lv_obj_add_event_cb(obj, event_handler_cb_main_main, LV_EVENT_ALL, flowState);
     {
         lv_obj_t *parent_obj = obj;
         {
-            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_t *obj = lv_dropdown_create(parent_obj);
             objects.obj0 = obj;
-            lv_obj_set_pos(obj, 356, 232);
+            lv_obj_set_pos(obj, 668, 17);
+            lv_obj_set_size(obj, 109, LV_SIZE_CONTENT);
+            lv_dropdown_set_options(obj, "");
+            lv_obj_add_event_cb(obj, event_handler_cb_main_obj0, LV_EVENT_ALL, flowState);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.obj4 = obj;
+            lv_obj_set_pos(obj, 456, 224);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_label_set_text(obj, "");
+            lv_label_set_text(obj, "Text");
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 605, 30);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "Theme:");
+        }
+        {
+            lv_obj_t *obj = lv_btn_create(parent_obj);
+            objects.obj1 = obj;
+            lv_obj_set_pos(obj, 339, 392);
+            lv_obj_set_size(obj, 100, 50);
+            lv_obj_add_event_cb(obj, event_handler_cb_main_obj1, LV_EVENT_ALL, flowState);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    lv_obj_t *obj = lv_label_create(parent_obj);
+                    lv_obj_set_pos(obj, 0, 0);
+                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    lv_label_set_text(obj, "Screen 2");
+                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_led_create(parent_obj);
+            objects.obj5 = obj;
+            lv_obj_set_pos(obj, 524, 216);
+            lv_obj_set_size(obj, 32, 32);
+            lv_led_set_color(obj, lv_color_hex(0xff000000));
+            lv_led_set_brightness(obj, 255);
+        }
+        {
+            lv_obj_t *obj = lv_meter_create(parent_obj);
+            objects.obj6 = obj;
+            lv_obj_set_pos(obj, 32, 30);
+            lv_obj_set_size(obj, 180, 180);
+            {
+                lv_meter_scale_t *scale = lv_meter_add_scale(obj);
+                scale0 = scale;
+                lv_meter_set_scale_ticks(obj, scale, 41, 1, 5, lv_color_hex(0xff000000));
+                lv_meter_set_scale_major_ticks(obj, scale, 8, 3, 10, lv_color_hex(0xffff0000), 10);
+                lv_meter_set_scale_range(obj, scale, 0, 100, 300, 120);
+                {
+                    lv_meter_indicator_t *indicator = lv_meter_add_needle_line(obj, scale, 3, lv_color_hex(0xff008000), -28);
+                    indicator1 = indicator;
+                    lv_meter_set_indicator_value(obj, indicator, 30);
+                }
+                {
+                    lv_meter_indicator_t *indicator = lv_meter_add_scale_lines(obj, scale, lv_color_hex(0xffffa500), lv_color_hex(0xffff00ff), false, 0);
+                    indicator2 = indicator;
+                    lv_meter_set_indicator_start_value(obj, indicator, 0);
+                    lv_meter_set_indicator_end_value(obj, indicator, 80);
+                }
+                {
+                    lv_meter_indicator_t *indicator = lv_meter_add_arc(obj, scale, 2, lv_color_hex(0xff00ffff), 0);
+                    indicator3 = indicator;
+                    lv_meter_set_indicator_start_value(obj, indicator, 0);
+                    lv_meter_set_indicator_end_value(obj, indicator, 90);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.obj7 = obj;
+            lv_obj_set_pos(obj, 501, 305);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "Styled Text");
+            add_style_styled_text(obj);
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
         }
     }
 }
@@ -34,29 +192,175 @@ void create_screen_main() {
 void tick_screen_main() {
     void *flowState = getFlowState(0, 0);
     {
-        const char *new_val = evalTextProperty(flowState, 0, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj0);
+        const char *new_val = evalStringArrayPropertyAndJoin(flowState, 0, 3, "Failed to evaluate Options in Dropdown widget", "\n");
+        const char *cur_val = lv_dropdown_get_options(objects.obj0);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.obj0;
-            lv_label_set_text(objects.obj0, new_val);
+            lv_dropdown_set_options(objects.obj0, new_val);
             tick_value_change_obj = NULL;
+        }
+    }
+    {
+        if (!(lv_obj_get_state(objects.obj0) & LV_STATE_EDITED)) {
+            int32_t new_val = evalIntegerProperty(flowState, 0, 4, "Failed to evaluate Selected in Dropdown widget");
+            int32_t cur_val = lv_dropdown_get_selected(objects.obj0);
+            if (new_val != cur_val) {
+                tick_value_change_obj = objects.obj0;
+                lv_dropdown_set_selected(objects.obj0, new_val);
+                tick_value_change_obj = NULL;
+            }
         }
     }
 }
 
+void create_screen_screen2() {
+    void *flowState = getFlowState(0, 1);
+    lv_obj_t *obj = lv_obj_create(0);
+    objects.screen2 = obj;
+    lv_obj_set_pos(obj, 0, 0);
+    lv_obj_set_size(obj, 800, 480);
+    lv_obj_add_event_cb(obj, event_handler_cb_screen2_screen2, LV_EVENT_ALL, flowState);
+    {
+        lv_obj_t *parent_obj = obj;
+        {
+            lv_obj_t *obj = lv_btn_create(parent_obj);
+            objects.obj2 = obj;
+            lv_obj_set_pos(obj, 347, 354);
+            lv_obj_set_size(obj, 100, 50);
+            lv_obj_add_event_cb(obj, event_handler_cb_screen2_obj2, LV_EVENT_ALL, flowState);
+            {
+                lv_obj_t *parent_obj = obj;
+                {
+                    lv_obj_t *obj = lv_label_create(parent_obj);
+                    lv_obj_set_pos(obj, 0, 0);
+                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    lv_label_set_text(obj, "Back");
+                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                }
+            }
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.obj8 = obj;
+            lv_obj_set_pos(obj, 385.5, 232.5);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "Screen 2");
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+        }
+        {
+            lv_obj_t *obj = lv_dropdown_create(parent_obj);
+            objects.obj3 = obj;
+            lv_obj_set_pos(obj, 672, 20);
+            lv_obj_set_size(obj, 109, LV_SIZE_CONTENT);
+            lv_dropdown_set_options(obj, "");
+            lv_obj_add_event_cb(obj, event_handler_cb_screen2_obj3, LV_EVENT_ALL, flowState);
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 609, 33);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "Theme:");
+        }
+        {
+            lv_obj_t *obj = lv_led_create(parent_obj);
+            objects.obj9 = obj;
+            lv_obj_set_pos(obj, 130, 146);
+            lv_obj_set_size(obj, 32, 32);
+            lv_led_set_color(obj, lv_color_hex(0xff000000));
+            lv_led_set_brightness(obj, 255);
+        }
+    }
+}
+
+void tick_screen_screen2() {
+    void *flowState = getFlowState(0, 1);
+    {
+        const char *new_val = evalStringArrayPropertyAndJoin(flowState, 4, 3, "Failed to evaluate Options in Dropdown widget", "\n");
+        const char *cur_val = lv_dropdown_get_options(objects.obj3);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj3;
+            lv_dropdown_set_options(objects.obj3, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        if (!(lv_obj_get_state(objects.obj3) & LV_STATE_EDITED)) {
+            int32_t new_val = evalIntegerProperty(flowState, 4, 4, "Failed to evaluate Selected in Dropdown widget");
+            int32_t cur_val = lv_dropdown_get_selected(objects.obj3);
+            if (new_val != cur_val) {
+                tick_value_change_obj = objects.obj3;
+                lv_dropdown_set_selected(objects.obj3, new_val);
+                tick_value_change_obj = NULL;
+            }
+        }
+    }
+}
+
+void on_theme_changed() {
+    lv_obj_set_style_text_color(&objects.obj4, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_led_set_color(&objects.obj5, lv_color_hex(0xff000000));
+    
+    scale0->tick_color = lv_color_hex(0xff000000);
+    scale0->tick_major_color = lv_color_hex(0xffff0000);
+    lv_obj_invalidate(&objects.obj6);
+    
+    indicator1->type_data.needle_line.color = lv_color_hex(0xff008000);
+    lv_obj_invalidate(&objects.obj6);
+    
+    indicator2->type_data.scale_lines.color_start = lv_color_hex(0xffffa500);
+    indicator2->type_data.scale_lines.color_end = lv_color_hex(0xffff00ff);
+    lv_obj_invalidate(&objects.obj6);
+    
+    indicator3->type_data.arc.color = lv_color_hex(0xff00ffff);
+    lv_obj_invalidate(&objects.obj6);
+    
+    lv_obj_set_style_text_color(&objects.obj7, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_obj_set_style_text_color(&objects.obj8, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_led_set_color(&objects.obj9, lv_color_hex(0xff000000));
+}
+
+extern void add_style(lv_obj_t *obj, int32_t styleIndex);
+extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
+
+void ui_create_groups() {
+    if (!groups_created) {
+        groups.encoder_group = lv_group_create();
+        eez_flow_init_groups((lv_group_t **)&groups, sizeof(groups) / sizeof(lv_group_t *));
+        groups_created = true;
+    }
+}
+
+static const char *screen_names[] = { "Main", "Screen2" };
+static const char *object_names[] = { "main", "screen2", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "obj6", "obj7", "obj8", "obj9" };
+static const char *group_names[] = { "encoder_group" };
+static const char *style_names[] = { "styled_text" };
 
 void create_screens() {
+    ui_create_groups();
+    
+    eez_flow_init_styles(add_style, remove_style);
+    
+    eez_flow_init_screen_names(screen_names, sizeof(screen_names) / sizeof(const char *));
+    eez_flow_init_object_names(object_names, sizeof(object_names) / sizeof(const char *));
+    eez_flow_init_group_names(group_names, sizeof(group_names) / sizeof(const char *));
+    eez_flow_init_style_names(style_names, sizeof(style_names) / sizeof(const char *));
+    
     lv_disp_t *dispp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
     
     create_screen_main();
+    create_screen_screen2();
 }
 
 typedef void (*tick_screen_func_t)();
 
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_main,
+    tick_screen_screen2,
 };
 
 void tick_screen(int screen_index) {

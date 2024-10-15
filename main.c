@@ -48,8 +48,8 @@ void setup() {
 
     hal_init();
 
-    //ui_create_groups();
-    //lv_indev_set_group(enc_indev, groups.encoder_group);
+    ui_create_groups();
+    lv_indev_set_group(enc_indev, groups.encoder_group);
     //lv_indev_set_group(kb_indev, groups.keyboard_group);
     ui_init();
 }

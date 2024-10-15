@@ -7,6 +7,11 @@
 extern "C" {
 #endif
 
+// Style: styled_text
+lv_style_t *get_style_styled_text_MAIN_DEFAULT();
+void add_style_styled_text(lv_obj_t *obj);
+void remove_style_styled_text(lv_obj_t *obj);
+
 
 
 #ifdef __cplusplus
