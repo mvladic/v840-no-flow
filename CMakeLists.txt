@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project (v8-with-flow-no-eez-framework)
+project (v8-no-flow-no-eez-framework)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -O2")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s INITIAL_MEMORY=83886080 -sLLD_REPORT_UNDEFINED -s USE_SDL=2")

@@ -15,11 +15,13 @@ extern "C" {
 // Flow global variables
 
 enum FlowGlobalVariables {
-    FLOW_GLOBAL_VARIABLE_SELECTED_THEME_INDEX = 0
+    FLOW_GLOBAL_VARIABLE_NONE
 };
 
 // Native global variables
 
+extern int32_t get_var_selected_theme_index();
+extern void set_var_selected_theme_index(int32_t value);
 
 
 #ifdef __cplusplus

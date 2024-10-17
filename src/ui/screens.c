@@ -23,8 +23,6 @@ static lv_meter_indicator_t * indicator3;
 
 static void event_handler_cb_main_main(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
     if (event == LV_EVENT_SCREEN_LOAD_START) {
         // group: encoder_group
         lv_group_remove_all_objs(groups.encoder_group);
@@ -33,71 +31,40 @@ static void event_handler_cb_main_main(lv_event_t *e) {
 
 static void event_handler_cb_main_obj0(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
     if (event == LV_EVENT_VALUE_CHANGED) {
         lv_obj_t *ta = lv_event_get_target(e);
         if (tick_value_change_obj != ta) {
             int32_t value = lv_dropdown_get_selected(ta);
-            if (tick_value_change_obj != ta) {
-                assignIntegerProperty(flowState, 0, 4, value, "Failed to assign Selected in Dropdown widget");
-            }
+            set_var_selected_theme_index(value);
         }
-    }
-}
-
-static void event_handler_cb_main_obj1(lv_event_t *e) {
-    lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
-    if (event == LV_EVENT_PRESSED) {
-        e->user_data = (void *)0;
-        flowPropagateValueLVGLEvent(flowState, 4, 0, e);
     }
 }
 
 static void event_handler_cb_screen2_screen2(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
     if (event == LV_EVENT_SCREEN_LOAD_START) {
         // group: encoder_group
         lv_group_remove_all_objs(groups.encoder_group);
     }
 }
 
-static void event_handler_cb_screen2_obj2(lv_event_t *e) {
+static void event_handler_cb_screen2_obj1(lv_event_t *e) {
     lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
-    if (event == LV_EVENT_PRESSED) {
-        e->user_data = (void *)0;
-        flowPropagateValueLVGLEvent(flowState, 0, 0, e);
-    }
-}
-
-static void event_handler_cb_screen2_obj3(lv_event_t *e) {
-    lv_event_code_t event = lv_event_get_code(e);
-    void *flowState = lv_event_get_user_data(e);
-    
     if (event == LV_EVENT_VALUE_CHANGED) {
         lv_obj_t *ta = lv_event_get_target(e);
         if (tick_value_change_obj != ta) {
             int32_t value = lv_dropdown_get_selected(ta);
-            if (tick_value_change_obj != ta) {
-                assignIntegerProperty(flowState, 4, 4, value, "Failed to assign Selected in Dropdown widget");
-            }
+            set_var_selected_theme_index(value);
         }
     }
 }
 
 void create_screen_main() {
-    void *flowState = getFlowState(0, 0);
     lv_obj_t *obj = lv_obj_create(0);
     objects.main = obj;
     lv_obj_set_pos(obj, 0, 0);
     lv_obj_set_size(obj, 800, 480);
-    lv_obj_add_event_cb(obj, event_handler_cb_main_main, LV_EVENT_ALL, flowState);
+    lv_obj_add_event_cb(obj, event_handler_cb_main_main, LV_EVENT_ALL, 0);
     {
         lv_obj_t *parent_obj = obj;
         {
@@ -105,12 +72,12 @@ void create_screen_main() {
             objects.obj0 = obj;
             lv_obj_set_pos(obj, 668, 17);
             lv_obj_set_size(obj, 109, LV_SIZE_CONTENT);
-            lv_dropdown_set_options(obj, "");
-            lv_obj_add_event_cb(obj, event_handler_cb_main_obj0, LV_EVENT_ALL, flowState);
+            lv_dropdown_set_options(obj, "Light\nDark");
+            lv_obj_add_event_cb(obj, event_handler_cb_main_obj0, LV_EVENT_ALL, 0);
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj4 = obj;
+            objects.obj2 = obj;
             lv_obj_set_pos(obj, 456, 224);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "Text");
@@ -124,10 +91,9 @@ void create_screen_main() {
         }
         {
             lv_obj_t *obj = lv_btn_create(parent_obj);
-            objects.obj1 = obj;
             lv_obj_set_pos(obj, 339, 392);
             lv_obj_set_size(obj, 100, 50);
-            lv_obj_add_event_cb(obj, event_handler_cb_main_obj1, LV_EVENT_ALL, flowState);
+            lv_obj_add_event_cb(obj, action_show_screen2, LV_EVENT_PRESSED, (void *)0);
             {
                 lv_obj_t *parent_obj = obj;
                 {
@@ -141,7 +107,7 @@ void create_screen_main() {
         }
         {
             lv_obj_t *obj = lv_led_create(parent_obj);
-            objects.obj5 = obj;
+            objects.obj3 = obj;
             lv_obj_set_pos(obj, 524, 216);
             lv_obj_set_size(obj, 32, 32);
             lv_led_set_color(obj, lv_color_hex(theme_colors[0][2]));
@@ -187,19 +153,9 @@ void create_screen_main() {
 }
 
 void tick_screen_main() {
-    void *flowState = getFlowState(0, 0);
-    {
-        const char *new_val = evalStringArrayPropertyAndJoin(flowState, 0, 3, "Failed to evaluate Options in Dropdown widget", "\n");
-        const char *cur_val = lv_dropdown_get_options(objects.obj0);
-        if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj0;
-            lv_dropdown_set_options(objects.obj0, new_val);
-            tick_value_change_obj = NULL;
-        }
-    }
     {
         if (!(lv_obj_get_state(objects.obj0) & LV_STATE_EDITED)) {
-            int32_t new_val = evalIntegerProperty(flowState, 0, 4, "Failed to evaluate Selected in Dropdown widget");
+            int32_t new_val = get_var_selected_theme_index();
             int32_t cur_val = lv_dropdown_get_selected(objects.obj0);
             if (new_val != cur_val) {
                 tick_value_change_obj = objects.obj0;
@@ -211,20 +167,18 @@ void tick_screen_main() {
 }
 
 void create_screen_screen2() {
-    void *flowState = getFlowState(0, 1);
     lv_obj_t *obj = lv_obj_create(0);
     objects.screen2 = obj;
     lv_obj_set_pos(obj, 0, 0);
     lv_obj_set_size(obj, 800, 480);
-    lv_obj_add_event_cb(obj, event_handler_cb_screen2_screen2, LV_EVENT_ALL, flowState);
+    lv_obj_add_event_cb(obj, event_handler_cb_screen2_screen2, LV_EVENT_ALL, 0);
     {
         lv_obj_t *parent_obj = obj;
         {
             lv_obj_t *obj = lv_btn_create(parent_obj);
-            objects.obj2 = obj;
             lv_obj_set_pos(obj, 347, 354);
             lv_obj_set_size(obj, 100, 50);
-            lv_obj_add_event_cb(obj, event_handler_cb_screen2_obj2, LV_EVENT_ALL, flowState);
+            lv_obj_add_event_cb(obj, action_show_main, LV_EVENT_PRESSED, (void *)0);
             {
                 lv_obj_t *parent_obj = obj;
                 {
@@ -238,7 +192,7 @@ void create_screen_screen2() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj6 = obj;
+            objects.obj4 = obj;
             lv_obj_set_pos(obj, 386, 233);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "Screen 2");
@@ -246,11 +200,11 @@ void create_screen_screen2() {
         }
         {
             lv_obj_t *obj = lv_dropdown_create(parent_obj);
-            objects.obj3 = obj;
+            objects.obj1 = obj;
             lv_obj_set_pos(obj, 672, 20);
             lv_obj_set_size(obj, 109, LV_SIZE_CONTENT);
-            lv_dropdown_set_options(obj, "");
-            lv_obj_add_event_cb(obj, event_handler_cb_screen2_obj3, LV_EVENT_ALL, flowState);
+            lv_dropdown_set_options(obj, "Light\nDark");
+            lv_obj_add_event_cb(obj, event_handler_cb_screen2_obj1, LV_EVENT_ALL, 0);
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
@@ -260,33 +214,30 @@ void create_screen_screen2() {
         }
         {
             lv_obj_t *obj = lv_led_create(parent_obj);
-            objects.obj7 = obj;
+            objects.obj5 = obj;
             lv_obj_set_pos(obj, 130, 146);
             lv_obj_set_size(obj, 32, 32);
             lv_led_set_color(obj, lv_color_hex(theme_colors[0][2]));
             lv_led_set_brightness(obj, 255);
         }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 570, 308);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_label_set_text(obj, "Styled Text");
+            add_style_styled_text(obj);
+        }
     }
 }
 
 void tick_screen_screen2() {
-    void *flowState = getFlowState(0, 1);
     {
-        const char *new_val = evalStringArrayPropertyAndJoin(flowState, 4, 3, "Failed to evaluate Options in Dropdown widget", "\n");
-        const char *cur_val = lv_dropdown_get_options(objects.obj3);
-        if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj3;
-            lv_dropdown_set_options(objects.obj3, new_val);
-            tick_value_change_obj = NULL;
-        }
-    }
-    {
-        if (!(lv_obj_get_state(objects.obj3) & LV_STATE_EDITED)) {
-            int32_t new_val = evalIntegerProperty(flowState, 4, 4, "Failed to evaluate Selected in Dropdown widget");
-            int32_t cur_val = lv_dropdown_get_selected(objects.obj3);
+        if (!(lv_obj_get_state(objects.obj1) & LV_STATE_EDITED)) {
+            int32_t new_val = get_var_selected_theme_index();
+            int32_t cur_val = lv_dropdown_get_selected(objects.obj1);
             if (new_val != cur_val) {
-                tick_value_change_obj = objects.obj3;
-                lv_dropdown_set_selected(objects.obj3, new_val);
+                tick_value_change_obj = objects.obj1;
+                lv_dropdown_set_selected(objects.obj1, new_val);
                 tick_value_change_obj = NULL;
             }
         }
@@ -296,9 +247,9 @@ void tick_screen_screen2() {
 void change_color_theme(uint32_t theme_index) {
     lv_style_set_text_color(get_style_styled_text_MAIN_DEFAULT(), lv_color_hex(theme_colors[theme_index][2]));
     
-    lv_obj_set_style_text_color(objects.obj4, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(objects.obj2, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
-    lv_led_set_color(objects.obj5, lv_color_hex(theme_colors[theme_index][2]));
+    lv_led_set_color(objects.obj3, lv_color_hex(theme_colors[theme_index][2]));
     
     scale0->tick_color = lv_color_hex(theme_colors[theme_index][3]);
     scale0->tick_major_color = lv_color_hex(theme_colors[theme_index][2]);
@@ -310,30 +261,20 @@ void change_color_theme(uint32_t theme_index) {
     
     indicator3->type_data.arc.color = lv_color_hex(theme_colors[theme_index][3]);
     
-    lv_obj_set_style_text_color(objects.obj6, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(objects.obj4, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
-    lv_led_set_color(objects.obj7, lv_color_hex(theme_colors[theme_index][2]));
+    lv_led_set_color(objects.obj5, lv_color_hex(theme_colors[theme_index][2]));
     
     lv_obj_invalidate(objects.main);
     lv_obj_invalidate(objects.screen2);
 }
 
-extern void add_style(lv_obj_t *obj, int32_t styleIndex);
-extern void remove_style(lv_obj_t *obj, int32_t styleIndex);
-
 void ui_create_groups() {
     if (!groups_created) {
         groups.encoder_group = lv_group_create();
-        eez_flow_init_groups((lv_group_t **)&groups, sizeof(groups) / sizeof(lv_group_t *));
         groups_created = true;
     }
 }
-
-static const char *screen_names[] = { "Main", "Screen2" };
-static const char *object_names[] = { "main", "screen2", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "obj6", "obj7" };
-static const char *group_names[] = { "encoder_group" };
-static const char *style_names[] = { "styled_text" };
-static const char *theme_names[] = { "Light", "Dark" };
 
 uint32_t theme_colors[2][4] = {
     { 0xffffffff, 0xff404040, 0xffd70f0f, 0xffccd917 },
@@ -342,14 +283,6 @@ uint32_t theme_colors[2][4] = {
 
 void create_screens() {
     ui_create_groups();
-    
-    eez_flow_init_styles(add_style, remove_style);
-    
-    eez_flow_init_screen_names(screen_names, sizeof(screen_names) / sizeof(const char *));
-    eez_flow_init_object_names(object_names, sizeof(object_names) / sizeof(const char *));
-    eez_flow_init_group_names(group_names, sizeof(group_names) / sizeof(const char *));
-    eez_flow_init_style_names(style_names, sizeof(style_names) / sizeof(const char *));
-    eez_flow_init_themes(theme_names, sizeof(theme_names) / sizeof(const char *), change_color_theme);
     
     lv_disp_t *dispp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
