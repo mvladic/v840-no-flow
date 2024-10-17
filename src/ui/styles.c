@@ -2,12 +2,14 @@
 #include "images.h"
 #include "fonts.h"
 
+#include "screens.h"
+
 //
 // Style: styled_text
 //
 
 void init_style_styled_text_MAIN_DEFAULT(lv_style_t *style) {
-    lv_style_set_text_color(style, lv_color_hex(0xff000000));
+    lv_style_set_text_color(style, lv_color_hex(theme_colors[0][2]));
 };
 
 lv_style_t *get_style_styled_text_MAIN_DEFAULT() {

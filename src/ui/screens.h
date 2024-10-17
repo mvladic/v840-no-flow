@@ -26,8 +26,6 @@ typedef struct _objects_t {
     lv_obj_t *obj5;
     lv_obj_t *obj6;
     lv_obj_t *obj7;
-    lv_obj_t *obj8;
-    lv_obj_t *obj9;
 } objects_t;
 
 extern objects_t objects;
@@ -42,6 +40,13 @@ void tick_screen_main();
 
 void create_screen_screen2();
 void tick_screen_screen2();
+
+enum ColorThemes {
+    THEME_ID_LIGHT,
+    THEME_ID_DARK,
+};
+void change_color_theme(uint32_t themeIndex);
+extern uint32_t theme_colors[2][4];
 
 void create_screens();
 void tick_screen(int screen_index);

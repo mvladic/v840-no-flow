@@ -114,7 +114,7 @@ void create_screen_main() {
             lv_obj_set_pos(obj, 456, 224);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "Text");
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_color(obj, lv_color_hex(theme_colors[0][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
@@ -144,33 +144,32 @@ void create_screen_main() {
             objects.obj5 = obj;
             lv_obj_set_pos(obj, 524, 216);
             lv_obj_set_size(obj, 32, 32);
-            lv_led_set_color(obj, lv_color_hex(0xff000000));
+            lv_led_set_color(obj, lv_color_hex(theme_colors[0][2]));
             lv_led_set_brightness(obj, 255);
         }
         {
             lv_obj_t *obj = lv_meter_create(parent_obj);
-            objects.obj6 = obj;
             lv_obj_set_pos(obj, 32, 30);
             lv_obj_set_size(obj, 180, 180);
             {
                 lv_meter_scale_t *scale = lv_meter_add_scale(obj);
                 scale0 = scale;
-                lv_meter_set_scale_ticks(obj, scale, 41, 1, 5, lv_color_hex(0xff000000));
-                lv_meter_set_scale_major_ticks(obj, scale, 8, 3, 10, lv_color_hex(0xffff0000), 10);
+                lv_meter_set_scale_ticks(obj, scale, 41, 1, 5, lv_color_hex(theme_colors[0][3]));
+                lv_meter_set_scale_major_ticks(obj, scale, 8, 3, 10, lv_color_hex(theme_colors[0][2]), 10);
                 lv_meter_set_scale_range(obj, scale, 0, 100, 300, 120);
                 {
-                    lv_meter_indicator_t *indicator = lv_meter_add_needle_line(obj, scale, 3, lv_color_hex(0xff008000), -28);
+                    lv_meter_indicator_t *indicator = lv_meter_add_needle_line(obj, scale, 3, lv_color_hex(theme_colors[0][3]), -28);
                     indicator1 = indicator;
                     lv_meter_set_indicator_value(obj, indicator, 30);
                 }
                 {
-                    lv_meter_indicator_t *indicator = lv_meter_add_scale_lines(obj, scale, lv_color_hex(0xffffa500), lv_color_hex(0xffff00ff), false, 0);
+                    lv_meter_indicator_t *indicator = lv_meter_add_scale_lines(obj, scale, lv_color_hex(theme_colors[0][2]), lv_color_hex(theme_colors[0][3]), false, 0);
                     indicator2 = indicator;
                     lv_meter_set_indicator_start_value(obj, indicator, 0);
                     lv_meter_set_indicator_end_value(obj, indicator, 80);
                 }
                 {
-                    lv_meter_indicator_t *indicator = lv_meter_add_arc(obj, scale, 2, lv_color_hex(0xff00ffff), 0);
+                    lv_meter_indicator_t *indicator = lv_meter_add_arc(obj, scale, 2, lv_color_hex(theme_colors[0][3]), 0);
                     indicator3 = indicator;
                     lv_meter_set_indicator_start_value(obj, indicator, 0);
                     lv_meter_set_indicator_end_value(obj, indicator, 90);
@@ -179,12 +178,10 @@ void create_screen_main() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj7 = obj;
             lv_obj_set_pos(obj, 501, 305);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "Styled Text");
             add_style_styled_text(obj);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
         }
     }
 }
@@ -241,11 +238,11 @@ void create_screen_screen2() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj8 = obj;
-            lv_obj_set_pos(obj, 385.5, 232.5);
+            objects.obj6 = obj;
+            lv_obj_set_pos(obj, 386, 233);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_label_set_text(obj, "Screen 2");
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_color(obj, lv_color_hex(theme_colors[0][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
         }
         {
             lv_obj_t *obj = lv_dropdown_create(parent_obj);
@@ -263,10 +260,10 @@ void create_screen_screen2() {
         }
         {
             lv_obj_t *obj = lv_led_create(parent_obj);
-            objects.obj9 = obj;
+            objects.obj7 = obj;
             lv_obj_set_pos(obj, 130, 146);
             lv_obj_set_size(obj, 32, 32);
-            lv_led_set_color(obj, lv_color_hex(0xff000000));
+            lv_led_set_color(obj, lv_color_hex(theme_colors[0][2]));
             lv_led_set_brightness(obj, 255);
         }
     }
@@ -296,30 +293,29 @@ void tick_screen_screen2() {
     }
 }
 
-void on_theme_changed() {
-    lv_obj_set_style_text_color(&objects.obj4, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+void change_color_theme(uint32_t theme_index) {
+    lv_style_set_text_color(get_style_styled_text_MAIN_DEFAULT(), lv_color_hex(theme_colors[theme_index][2]));
     
-    lv_led_set_color(&objects.obj5, lv_color_hex(0xff000000));
+    lv_obj_set_style_text_color(objects.obj4, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
-    scale0->tick_color = lv_color_hex(0xff000000);
-    scale0->tick_major_color = lv_color_hex(0xffff0000);
-    lv_obj_invalidate(&objects.obj6);
+    lv_led_set_color(objects.obj5, lv_color_hex(theme_colors[theme_index][2]));
     
-    indicator1->type_data.needle_line.color = lv_color_hex(0xff008000);
-    lv_obj_invalidate(&objects.obj6);
+    scale0->tick_color = lv_color_hex(theme_colors[theme_index][3]);
+    scale0->tick_major_color = lv_color_hex(theme_colors[theme_index][2]);
     
-    indicator2->type_data.scale_lines.color_start = lv_color_hex(0xffffa500);
-    indicator2->type_data.scale_lines.color_end = lv_color_hex(0xffff00ff);
-    lv_obj_invalidate(&objects.obj6);
+    indicator1->type_data.needle_line.color = lv_color_hex(theme_colors[theme_index][3]);
     
-    indicator3->type_data.arc.color = lv_color_hex(0xff00ffff);
-    lv_obj_invalidate(&objects.obj6);
+    indicator2->type_data.scale_lines.color_start = lv_color_hex(theme_colors[theme_index][2]);
+    indicator2->type_data.scale_lines.color_end = lv_color_hex(theme_colors[theme_index][3]);
     
-    lv_obj_set_style_text_color(&objects.obj7, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    indicator3->type_data.arc.color = lv_color_hex(theme_colors[theme_index][3]);
     
-    lv_obj_set_style_text_color(&objects.obj8, lv_color_hex(0xff000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(objects.obj6, lv_color_hex(theme_colors[theme_index][2]), LV_PART_MAIN | LV_STATE_DEFAULT);
     
-    lv_led_set_color(&objects.obj9, lv_color_hex(0xff000000));
+    lv_led_set_color(objects.obj7, lv_color_hex(theme_colors[theme_index][2]));
+    
+    lv_obj_invalidate(objects.main);
+    lv_obj_invalidate(objects.screen2);
 }
 
 extern void add_style(lv_obj_t *obj, int32_t styleIndex);
@@ -334,9 +330,15 @@ void ui_create_groups() {
 }
 
 static const char *screen_names[] = { "Main", "Screen2" };
-static const char *object_names[] = { "main", "screen2", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "obj6", "obj7", "obj8", "obj9" };
+static const char *object_names[] = { "main", "screen2", "obj0", "obj1", "obj2", "obj3", "obj4", "obj5", "obj6", "obj7" };
 static const char *group_names[] = { "encoder_group" };
 static const char *style_names[] = { "styled_text" };
+static const char *theme_names[] = { "Light", "Dark" };
+
+uint32_t theme_colors[2][4] = {
+    { 0xffffffff, 0xff404040, 0xffd70f0f, 0xffccd917 },
+    { 0xff000000, 0xff000000, 0xff1ae0b8, 0xff5014db },
+};
 
 void create_screens() {
     ui_create_groups();
@@ -347,6 +349,7 @@ void create_screens() {
     eez_flow_init_object_names(object_names, sizeof(object_names) / sizeof(const char *));
     eez_flow_init_group_names(group_names, sizeof(group_names) / sizeof(const char *));
     eez_flow_init_style_names(style_names, sizeof(style_names) / sizeof(const char *));
+    eez_flow_init_themes(theme_names, sizeof(theme_names) / sizeof(const char *), change_color_theme);
     
     lv_disp_t *dispp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
