@@ -25,7 +25,22 @@ void create_screen_main() {
             lv_obj_t *obj = lv_label_create(parent_obj);
             lv_obj_set_pos(obj, 356, 232);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_obj_set_style_text_font(obj, ui_font_oswald_medium_24, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_label_set_text(obj, "Hello, world!");
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 351, 321);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_obj_set_style_text_font(obj, ui_font_oswald_medium_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "Text");
+        }
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 323, 114);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_obj_set_style_text_font(obj, &ui_font_bitmap_font, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "Text");
         }
     }
     
@@ -48,7 +63,35 @@ void tick_screen_by_id(enum ScreensEnum screenId) {
     tick_screen_funcs[screenId - 1]();
 }
 
+lv_font_t *ui_font_oswald_medium_24;
+lv_font_t *ui_font_oswald_medium_14;
+
 void create_screens() {
+    {
+        lv_ft_info_t info;
+        info.name = "Oswald-Medium.ttf";
+        info.weight = 24;
+        info.style = FT_FONT_STYLE_NORMAL;
+        info.mem = 0;
+        if (!lv_ft_font_init(&info)) {
+            LV_LOG_ERROR("font create failed: ui_font_oswald_medium_24");
+        } else {
+            ui_font_oswald_medium_24 = info.font;
+        }
+    }
+    {
+        lv_ft_info_t info;
+        info.name = "Oswald-Medium.ttf";
+        info.weight = 18;
+        info.style = FT_FONT_STYLE_ITALIC;
+        info.mem = 0;
+        if (!lv_ft_font_init(&info)) {
+            LV_LOG_ERROR("font create failed: ui_font_oswald_medium_14");
+        } else {
+            ui_font_oswald_medium_14 = info.font;
+        }
+    }
+    
     lv_disp_t *dispp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
