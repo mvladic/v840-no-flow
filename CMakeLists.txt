@@ -7,7 +7,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s INITIAL_MEMORY=83886080
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
-    /opt/freetype-2.14.1/include
+    /opt/freetype-2.14.2/include
 )
 
 add_subdirectory(lvgl)
