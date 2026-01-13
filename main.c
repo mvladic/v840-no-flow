@@ -92,7 +92,7 @@ int main(int argc, char ** argv)
     // lv_indev_set_group(enc_indev, groups.encoder_group);
     // lv_indev_set_group(kb_indev, groups.keyboard_group);
 
-    emscripten_set_main_loop_arg(do_loop, NULL, -1, true);
+    emscripten_set_main_loop_arg(do_loop, NULL, 0, true);
 }
 
 void do_loop(void *arg)
@@ -105,19 +105,19 @@ void do_loop(void *arg)
 
     SDL_Event event;
     
-    while(SDL_PollEvent(&event)) {
-        #if USE_MOUSE != 0
-            mouse_handler(&event);
-        #endif
+    // while(SDL_PollEvent(&event)) {
+    //     #if USE_MOUSE != 0
+    //         mouse_handler(&event);
+    //     #endif
 
-        #if USE_KEYBOARD
-            keyboard_handler(&event);
-        #endif
+    //     #if USE_KEYBOARD
+    //         keyboard_handler(&event);
+    //     #endif
 
-        #if USE_MOUSEWHEEL != 0
-            mousewheel_handler(&event);
-        #endif
-    }
+    //     #if USE_MOUSEWHEEL != 0
+    //         mousewheel_handler(&event);
+    //     #endif
+    // }
 
 }
 
